@@ -49,7 +49,7 @@ namespace RpsGame_NoDb
                         int inInt = 0;
                         int pWins = 0;
                         int cWins = 0;
-                        while (pWins < 2 && cWins < 2)
+                        while (pWins < 2 && cWins < 2 && inInt != 4)
                         {
                             // Best of 3 menu
                             Console.WriteLine("\nBest of 3 - Current score: P " + pWins + " | C " + cWins);
@@ -77,11 +77,11 @@ namespace RpsGame_NoDb
                             }
                         }
                         // score checking
-                        if (pWins > cWins) 
+                        if (pWins > cWins && inInt != 4) 
                         {
                             Console.WriteLine("\nYou win Best of 3!\n");
                         }
-                        else if (cWins > pWins) 
+                        else if (cWins > pWins || inInt == 4) 
                         {
                             Console.WriteLine("\nYou lose Best of 3.\n");
                         }
@@ -92,7 +92,7 @@ namespace RpsGame_NoDb
                         int inInt = 0;
                         int pWins = 0;
                         int cWins = 0;
-                        while (pWins < 3 && cWins < 3)
+                        while (pWins < 3 && cWins < 3 && inInt != 4)
                         {
                             // Best of 5 menu
                             Console.WriteLine("\nBest of 5 - Current score: P " + pWins + " | C " + cWins);
@@ -108,6 +108,8 @@ namespace RpsGame_NoDb
                             catch (Exception){
                                 input = 5;
                             }
+                            if (inInt == 4)
+                                break;
                             // run oneRound then adjust new scores
                             int round = oneRound(inInt);
                             if (round == 1)
@@ -120,11 +122,11 @@ namespace RpsGame_NoDb
                             }
                         }
                         // score checking
-                        if (pWins > cWins) 
+                        if (pWins > cWins && inInt != 4) 
                         {
                             Console.WriteLine("\nYou win Best of 5!\n");
                         }
-                        else if (cWins > pWins) 
+                        else if (cWins > pWins || inInt == 4) 
                         {
                             Console.WriteLine("\nYou lose Best of 5.\n");
                         }
@@ -145,7 +147,7 @@ namespace RpsGame_NoDb
         // method to run one round of RPS
         static int oneRound(int choice)
         {
-            var rand = new Random(new Random().Next());
+            var rand = new Random();
             int gameInt = rand.Next(1, 4);
             // switch takes user choice, creates a random number, compares the two, 
             // then returns a value for win, loss, or tie
