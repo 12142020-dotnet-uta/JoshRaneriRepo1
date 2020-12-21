@@ -18,7 +18,7 @@ namespace RpsGame_NoDb
         /// Takes optional Player object and increments wins or losses
         /// </summary>
         /// <param name="p">Player object</param>
-        public void RoundWinner(Player p = null)
+        public void RoundWinner(Player p)
         {
             if (p.PlayerId == Player1.PlayerId){
                 p1RoundWins++;
