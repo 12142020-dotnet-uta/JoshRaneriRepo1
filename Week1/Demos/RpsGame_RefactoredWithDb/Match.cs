@@ -15,9 +15,9 @@ namespace RpsGame_NoDb
         public Player TiePlayer { get; set; }
         public bool MatchWon { get; set; }
         public List<Round> Rounds = new List<Round>();
-        private int p1RoundWins { get; set; }
-        private int p2RoundWins { get; set; }
-        private int ties { get; set; }
+        public int p1RoundWins { get; set; }
+        public int p2RoundWins { get; set; }
+        public int ties { get; set; }
 
         /// <summary>
         /// Takes optional Player object and increments wins or losses

@@ -6,15 +6,16 @@ namespace RpsGame_NoDb
     class Program
     {
         static RpsRepositoryLayer gameContext = new RpsRepositoryLayer();
+        static RpsDbContext dbContext = new RpsDbContext();
 
         static void Main(string[] args)
         {
             Console.WriteLine("Rock - Paper - Scissors");
 
-            Player tiePlayer = new Player("Tie", "Game");
+            Player tiePlayer = gameContext.UserVerify(new Player("Tie", "Game"));
             Player p2 = new Player();
             //create Computer player
-            Player p1 = new Player("Max", "Headroom");
+            Player p1 = gameContext.UserVerify(new Player("Max", "Headroom"));
             gameContext.AddPlayer(p1);
 
             do
@@ -39,11 +40,11 @@ namespace RpsGame_NoDb
                 {
                     Match match = gameContext.NewMatch(p1, p2, tiePlayer);
                     Console.WriteLine($"\nWelcome, {match.Player2.FName}.\n");
-                    Console.WriteLine("1) 1 Round");
-                    Console.WriteLine("2) Best of 3");
-                    Console.WriteLine("3) Best of 5");
-                    Console.WriteLine("4) Logout");
-                    Console.WriteLine("5. Exit");
+                    Console.WriteLine("  1) 1 Round");
+                    Console.WriteLine("  2) Best of 3");
+                    Console.WriteLine("  3) Best of 5");
+                    Console.WriteLine("  4) Logout");
+                    Console.WriteLine("  5. Exit\n");
                     Console.Write("Please choose a game mode: ");
                     int roundsToWin = 0;
                     roundsToWin = gameContext.SelectGame(match);
@@ -56,10 +57,10 @@ namespace RpsGame_NoDb
                         {
                             Console.WriteLine($"The current score is CPU: {match.GetPlayerWins(match.Player1)} - Player: {match.GetPlayerWins(match.Player2)} - Ties - {match.GetPlayerWins(match.TiePlayer)}\n");
                         }
-                        Console.WriteLine("1) Rock");
-                        Console.WriteLine("2) Paper");
-                        Console.WriteLine("3) Scissors");
-                        Console.WriteLine("4) Exit / Previous Menu");
+                        Console.WriteLine("  1) Rock");
+                        Console.WriteLine("  2) Paper");
+                        Console.WriteLine("  3) Scissors");
+                        Console.WriteLine("  4) Exit / Previous Menu\n");
                         Console.Write("Please make a selection: ");
                         round = gameContext.OneRound(match);
                         gameContext.DeclareAWinner(match, round);

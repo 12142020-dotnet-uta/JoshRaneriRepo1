@@ -4,9 +4,9 @@ namespace RpsGame_NoDb
 {
     public class RpsDbContext : DbContext
     {
-        DbSet<Player> players { get; set; }
-        DbSet<Round> rounds { get; set; }
-        DbSet<Match> matches { get; set; }
+        public DbSet<Player> players { get; set; }
+        public DbSet<Round> rounds { get; set; }
+        public DbSet<Match> matches { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {

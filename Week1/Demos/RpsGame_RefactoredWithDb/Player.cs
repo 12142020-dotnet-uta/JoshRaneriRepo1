@@ -46,8 +46,8 @@ namespace RpsGame_NoDb
                 }
             }
         }
-        private int numWins;
-        private int numLosses;        
+        public int numWins;
+        public int numLosses;        
         public void AddWin()
         {
             numWins++;
