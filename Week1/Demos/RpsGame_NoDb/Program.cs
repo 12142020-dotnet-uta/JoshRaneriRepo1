@@ -220,7 +220,7 @@ namespace RpsGame_NoDb
         static Round oneRound(Player p1, Player p2, int playerChoiceInt)
         {
             Round currentRound = new Round();
-            var rand = new Random();
+            var rand = new Random((int)DateTime.Now.Millisecond);
             Choice playerChoice = (Choice)playerChoiceInt;
             Choice compChoice = (Choice)rand.Next(1, 4);
             currentRound.Player2Choice = playerChoice;
