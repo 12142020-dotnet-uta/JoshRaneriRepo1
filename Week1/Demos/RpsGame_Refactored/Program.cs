@@ -58,7 +58,8 @@ namespace RpsGame_NoDb
                     {
                         Round round = new Round();
                         Console.WriteLine($"\nWelcome, {match.Player2.FName}.\n");
-                        if (roundsToWin > 1){
+                        if (roundsToWin > 1)
+                        {
                             Console.WriteLine($"The current score is CPU: {match.GetPlayerWins(match.Player1)} - Player: {match.GetPlayerWins(match.Player2)} - Ties - {match.GetPlayerWins(new Player())}\n");
                         }
                         Console.WriteLine("1) Rock");
@@ -87,7 +88,7 @@ namespace RpsGame_NoDb
                 case 1:
                     {
                         gameSelected = true;
-                        return 1;                        
+                        return 1;
                     }
                 case 2:
                     {
@@ -212,32 +213,32 @@ namespace RpsGame_NoDb
             int loginSelection = CheckInt();
             do
             {
-            if (loginSelection == 1)
-            {
-                Player pTemp = new Player();
-                do
+                if (loginSelection == 1)
                 {
-                    Console.Write("\nPlease enter First and Last Name separated by ' ': ");
-                    userName = Console.ReadLine();
-                    userNameArray = userName.Split(' ');
-                } while (userName == "" || userName == null);
+                    Player pTemp = new Player();
+                    do
+                    {
+                        Console.Write("\nPlease enter First and Last Name separated by ' ': ");
+                        userName = Console.ReadLine();
+                        userNameArray = userName.Split(' ');
+                    } while (userName == "" || userName == null);
 
-                if (userNameArray.Length == 1)
-                {
-                    pTemp.FName = userNameArray[0];
+                    if (userNameArray.Length == 1)
+                    {
+                        pTemp.FName = userNameArray[0];
+                    }
+                    else if (userNameArray.Length > 1)
+                    {
+                        pTemp.FName = userNameArray[0];
+                        pTemp.LName = userNameArray[1];
+                    }
+                    return pTemp;
                 }
-                else if (userNameArray.Length > 1)
+                else if (loginSelection == 2)
                 {
-                    pTemp.FName = userNameArray[0];
-                    pTemp.LName = userNameArray[1];
+                    Environment.Exit(0);
+                    return null;
                 }
-                return pTemp;
-            }
-            else if (loginSelection == 2)
-            {
-                Environment.Exit(0);
-                return null;
-            }
             } while (loginSelection != 1);
             return null;
         }

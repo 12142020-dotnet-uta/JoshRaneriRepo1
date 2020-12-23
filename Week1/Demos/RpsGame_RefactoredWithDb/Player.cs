@@ -46,21 +46,21 @@ namespace RpsGame_NoDb
                 }
             }
         }
-        public int numWins;
-        public int numLosses;        
+        public int NumWins { get; set; }
+        public int NumLosses { get; set; }
         public void AddWin()
         {
-            numWins++;
+            NumWins++;
         }
         public void AddLoss()
         {
-            numLosses++;
+            NumLosses++;
         }
         public int[] GetWinLossRecord()
         {
             int[] winsAndLosses = new int[2];
-            winsAndLosses[0] = numWins;
-            winsAndLosses[1] = numLosses;
+            winsAndLosses[0] = NumWins;
+            winsAndLosses[1] = NumLosses;
             return winsAndLosses;
         }
     }

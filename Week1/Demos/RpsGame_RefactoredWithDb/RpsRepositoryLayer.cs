@@ -6,15 +6,20 @@ namespace RpsGame_NoDb
 {
     public class RpsRepositoryLayer
     {
-        List<Player> players = new List<Player>();
-        List<Round> rounds = new List<Round>();
-        List<Match> matches = new List<Match>();
+        // List<Player> players = new List<Player>();
+        // List<Round> rounds = new List<Round>();
+        // List<Match> matches = new List<Match>();
+        RpsDbContext DbContext = new RpsDbContext();
         bool loggedIn = false;
         bool gameSelected = false;
 
         public void AddPlayer(Player p)
         {
-            players.Add(p);
+            if (p == UserVerify(p))
+            {
+                DbContext.players.Add(p);
+            }
+            DbContext.SaveChanges();
         }
         public bool CheckLogged()
         {
@@ -31,6 +36,18 @@ namespace RpsGame_NoDb
         public void SetGameSelected(bool gameStatus)
         {
             gameSelected = gameStatus;
+        }
+        public List<Match> GetMatches()
+        {
+            return DbContext.matches.ToList();
+        }
+        public List<Player> GetPlayers()
+        {
+            return DbContext.players.ToList();
+        }
+        public List<Round> GetRounds()
+        {
+            return DbContext.rounds.ToList();
         }
         public Player UserLogin()
         {
@@ -71,19 +88,61 @@ namespace RpsGame_NoDb
         public Player UserVerify(Player pT)
         {
             Player p = new Player();
-            foreach (Player checkPlayer in players)
+            // foreach (Player checkPlayer in GetPlayers())
+            // {
+            //     if ((checkPlayer.FName == pT.FName && checkPlayer.LName == pT.LName) || (checkPlayer.PlayerId == pT.PlayerId))
+            //     {
+            //         p = checkPlayer;
+            //     }
+            //     else
+            //     {
+            //         p = pT;
+            //     }
+            // }
+            Player p1 = DbContext.players.Where(x => x.PlayerId == pT.PlayerId).FirstOrDefault();
+            if (p1 == null)
             {
-                if (checkPlayer.FName == pT.FName && checkPlayer.LName == pT.LName)
+                DbContext.players.Add(pT);
+                DbContext.SaveChanges();
+            }
+            return p;
+        }
+        public Match MatchVerify(Match mT)
+        {
+            Match m = new Match();
+            if (GetMatches() != null)
+            {
+                foreach (Match checkMatch in GetMatches())
                 {
-                    p = checkPlayer;
+                    if (checkMatch.MatchId == mT.MatchId)
+                    {
+                        m = checkMatch;
+                        break;
+                    }
+                    else
+                    {
+                        m = mT;
+                    }
+                }
+            }
+            return m;
+        }
+        public Round RoundVerify(Round rT)
+        {
+            Round r = new Round();
+            foreach (Round checkRound in GetRounds())
+            {
+                if (checkRound.RoundId == rT.RoundId)
+                {
+                    r = checkRound;
                     break;
                 }
                 else
                 {
-                    p = pT;
+                    r = rT;
                 }
             }
-            return p;
+            return r;
         }
         public int CheckInt()
         {
@@ -216,15 +275,17 @@ namespace RpsGame_NoDb
         public void DeclareAWinner(Match match, Round round)
         {
             match.RoundWinner(round.WinningPlayer);
-            rounds.Add(round);
-            matches.Add(match);
             if (round.WinningPlayer == match.Player2)
             {
                 Console.WriteLine("\n" + round.Player2Choice.ToString() + " beats " + round.Player1Choice.ToString() + ". You win!");
+                match.Player2.AddWin();
+                match.Player1.AddLoss();
             }
             else if (round.WinningPlayer == match.Player1)
             {
                 Console.WriteLine("\n" + round.Player1Choice.ToString() + " beats " + round.Player2Choice.ToString() + ". You lose.");
+                match.Player1.AddWin();
+                match.Player2.AddLoss();
             }
             else if (round.WinningPlayer == match.TiePlayer)
             {
@@ -233,6 +294,29 @@ namespace RpsGame_NoDb
                     Console.WriteLine("\nBoth players chose " + round.Player2Choice.ToString() + ". Game is a tie.");
                 }
             }
+            Console.WriteLine("1");
+            DbContext.rounds.Add(round);
+            match.Rounds.Add(round);
+            Console.WriteLine("2");            
+            Match m1 = DbContext.matches.Where(y => y.MatchId == match.MatchId).FirstOrDefault();
+            if (m1 == null)
+            {
+                DbContext.matches.Add(match);
+            }
+            Console.WriteLine("3");
+            DbContext.SaveChanges();
+            Console.WriteLine("4");
+        }
+        public bool AddCompletedMatch(Match match)
+        {
+            Match m1 = DbContext.matches.Where(x => x.MatchId == match.MatchId).FirstOrDefault();
+            if (m1 == null)
+            {
+                DbContext.matches.Add(match);
+                DbContext.SaveChanges();
+                return true;
+            }
+            return false;
         }
     }
 }

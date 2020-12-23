@@ -6,7 +6,6 @@ namespace RpsGame_NoDb
     class Program
     {
         static RpsRepositoryLayer gameContext = new RpsRepositoryLayer();
-        static RpsDbContext dbContext = new RpsDbContext();
 
         static void Main(string[] args)
         {
@@ -17,6 +16,7 @@ namespace RpsGame_NoDb
             //create Computer player
             Player p1 = gameContext.UserVerify(new Player("Max", "Headroom"));
             gameContext.AddPlayer(p1);
+            gameContext.AddPlayer(tiePlayer);
 
             do
             {
@@ -64,19 +64,20 @@ namespace RpsGame_NoDb
                         Console.Write("Please make a selection: ");
                         round = gameContext.OneRound(match);
                         gameContext.DeclareAWinner(match, round);
-                        if ((match.GetPlayerWins(match.Player1) >= roundsToWin || match.GetPlayerWins(match.Player2) >= roundsToWin) && roundsToWin > 1)
+                        if ((match.GetPlayerWins(match.Player1) >= roundsToWin || match.GetPlayerWins(match.Player2) >= roundsToWin) && roundsToWin >= 1)
                         {
                             Console.WriteLine($"{match.MatchWinner(roundsToWin).FName} has won the match.");
                             gameContext.SetGameSelected(false);
                         }
                         else if ((match.GetPlayerWins(match.Player1) >= roundsToWin || match.GetPlayerWins(match.Player2) >= roundsToWin) && roundsToWin == 1)
                         {
+                            Console.WriteLine($"{match.MatchWinner(roundsToWin).FName} has won the match.");
                             gameContext.SetGameSelected(false);
                         }
                         else if (roundsToWin > 3 || roundsToWin < 0)
                         {
                             gameContext.SetGameSelected(false);
-                        }
+                        }                
                     }
                 }
             } while (!gameContext.CheckLogged());

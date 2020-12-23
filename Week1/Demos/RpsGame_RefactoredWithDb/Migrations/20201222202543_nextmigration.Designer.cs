@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RpsGame_NoDb;
 
 namespace RpsGame_NoDb.Migrations
 {
     [DbContext(typeof(RpsDbContext))]
-    partial class RpsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201222202543_nextmigration")]
+    partial class nextmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,12 +70,6 @@ namespace RpsGame_NoDb.Migrations
 
                     b.Property<string>("LName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumLosses")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumWins")
-                        .HasColumnType("int");
 
                     b.HasKey("PlayerId");
 
