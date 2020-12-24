@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace P0_JoshRaneri
 {
@@ -6,6 +7,7 @@ namespace P0_JoshRaneri
     {
         private Guid customerId = Guid.NewGuid();
         [Key]
-        public Guid CustomerId { get { return }}
+        public Guid CustomerId { get { return customerId; } set { customerId = value; } }
+
     }
 }
