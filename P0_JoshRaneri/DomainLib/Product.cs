@@ -1,12 +1,22 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace P0_JoshRaneri
+namespace DomainLib
 {
     public class Product
     {
-        private Guid productId = Guid.NewGuid();
+        public Product()
+        {
+            
+        }
+        private int productId;
         [Key]
-        public Guid ProductId { get { return ProductId; } set { ProductId = value; } }
+        public int ProductId { get => productId; set => productId = value; }
+        private decimal price;
+        [Required]
+        public decimal Price { get => price; set => price = value;}
+        private string description;
+        [Required]
+        public string Description { get => description; set => description = value; }
     }
 }

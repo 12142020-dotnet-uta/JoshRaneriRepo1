@@ -1,8 +1,10 @@
 ﻿using System;
+using DomainLib;
 
 namespace DBAccessLib
 {
-    public class Class1
+    public class DBAccessLib
     {
+        
     }
 }

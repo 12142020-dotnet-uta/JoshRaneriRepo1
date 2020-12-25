@@ -1,12 +1,21 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace P0_JoshRaneri
+namespace DomainLib
 {
     public class Location
     {
-        private Guid locationId = Guid.NewGuid();
+        public Location()
+        {            
+        }
+        public Location(string locName)
+        {
+            this.LocationName = locName;
+        }
+        private int locationId;
         [Key]
-        public Guid LocationId { get { return locationId; } set { locationId = value; } }
+        public int LocationId { get => locationId; set => locationId = value; }
+        [Required]
+        private string locationName;
+        public string LocationName { get => locationName; set => locationName = value; }
     }
 }
