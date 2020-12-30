@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainLib
 {
@@ -13,6 +14,7 @@ namespace DomainLib
         }
         private int locationId;
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public int LocationId { get => locationId; set => locationId = value; }
         [Required]
         private string locationName;

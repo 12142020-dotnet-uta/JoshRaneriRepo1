@@ -38,11 +38,13 @@ namespace DomainLib
         private string address;
         [Required]
         public string Address { get => address; set => address = value; }
+        private bool isAdmin = false;
+        public bool IsAdmin {get => isAdmin; set => isAdmin = value;}
         private int defaultStore;
         [ForeignKey("LocationId")]
         public int DefaultStore { get => defaultStore; set => defaultStore = value; }
-        private int cartId;
+        private Guid cartId = Guid.NewGuid();
         [ForeignKey("CartId")]
-        public int CartId { get => cartId; set => cartId = value; }        
+        public Guid CartId { get => cartId; set => cartId = value; }        
     }
 }

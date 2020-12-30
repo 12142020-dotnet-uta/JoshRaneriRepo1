@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainLib
 {
@@ -11,6 +12,7 @@ namespace DomainLib
         }
         private int productId;
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public int ProductId { get => productId; set => productId = value; }
         private decimal price;
         [Required]

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainLib
 {
@@ -7,13 +8,17 @@ namespace DomainLib
         public InventoryLine()
         {
         }
+        public InventoryLine(int locId, int prodId, int quant)
+        {
+            this.LocationId = locId;
+            this.ProductId = prodId;
+            this.Quantity = quant;
+        }
         private int locationId;
-        [Key]
-        [Required]
+        [ForeignKey("LocationId")]
         public int LocationId { get => locationId; set => locationId = value; }        
         private int productId;
-        [Key]
-        [Required]
+        [ForeignKey("ProductId")]
         public int ProductId { get => productId; set => productId = value; }
         private int quantity;
         [Required]
