@@ -9,7 +9,7 @@ namespace RpsGame_NoDb
         
         private Guid matchId = Guid.NewGuid();
         [Key]
-        public Guid MatchId { get { return MatchId; } set { MatchId = value; }}
+        public Guid MatchId { get { return matchId; } set { matchId = value; }}
         public Player Player1 { get; set; }
         public Player Player2 { get; set; }
         public Player TiePlayer { get; set; }
