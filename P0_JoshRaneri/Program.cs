@@ -4,7 +4,7 @@ using System.Linq;
 using DBAccessLib;
 using DomainLib;
 
-namespace P0_JoshRaneri
+namespace P0_JoshRaneri 
 {
     class Program
     {
@@ -136,6 +136,7 @@ namespace P0_JoshRaneri
                 Console.WriteLine("\nPlease enter a valid choice.\n");
                 DrawLocationMenu();
             }
+            appContext.CartSetup();
             return choice;
         }
         /// <summary>
@@ -302,7 +303,6 @@ namespace P0_JoshRaneri
         /// <summary>
         /// Draws Record Search Menu and renders resulting listings
         /// </summary>
-
         static void DrawRecordSearchMenu()
         {
             int choice = 0;

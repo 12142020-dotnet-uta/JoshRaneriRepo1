@@ -398,7 +398,7 @@ namespace DBAccessLib
                 List<Product> productList = new List<Product>();
                 string[] descriptions = {"Ball-in-a-Cup Game", "Left Shoe", "Broken Soldering Iron", "Wedge of Cheese", "Straightened Paperclip"};
                 decimal[] prices = {5.00m, 7.83m, 8.41m, 4.99m, 0.99m};
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < descriptions.Length; i++)
                 {
                     Product newProduct = new Product();
                     newProduct.Description = $"{descriptions[i]}";
