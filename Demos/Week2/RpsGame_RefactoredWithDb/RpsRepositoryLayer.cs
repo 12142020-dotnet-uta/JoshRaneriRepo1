@@ -233,6 +233,7 @@ namespace RpsGame_NoDb
                     Console.WriteLine("\nBoth players chose " + round.Player2Choice.ToString() + ". Game is a tie.");
                 }
             }
+            
         }
     }
 }
