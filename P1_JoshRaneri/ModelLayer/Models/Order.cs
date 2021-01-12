@@ -17,12 +17,13 @@ namespace ModelLayer
         public Guid OrderId { get; set; }
         [ForeignKey("LocationId")]
         public int LocationId { get; set; }
-        [ForeignKey("UserId")]
-        public int UserId { get; set; }
+        [ForeignKey("Id")]
+        public string Id { get; set; }
         [ForeignKey("CartId")]
         public Guid CartId { get; set; }
         [Required]
         public DateTime OrderTime { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal OrderTotal { get; set; }
     }
 }

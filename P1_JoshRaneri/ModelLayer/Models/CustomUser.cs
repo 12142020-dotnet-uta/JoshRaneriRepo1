@@ -18,7 +18,6 @@ namespace ModelLayer
         public string LastName { get; set; }
         [Required]
         public string Address { get; set; }
-        public bool IsAdmin { get; set; }
         [ForeignKey("LocationId")]
         public int DefaultStore { get; set; }
         [ForeignKey("CartId")]

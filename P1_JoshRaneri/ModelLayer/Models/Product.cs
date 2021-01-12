@@ -17,6 +17,7 @@ namespace ModelLayer
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductId { get; set; }
         [Required]
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
         [Required]
         public string Description { get; set; }

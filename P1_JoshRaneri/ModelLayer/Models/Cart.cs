@@ -14,8 +14,12 @@ namespace ModelLayer
 
         }
         [Key]
-        public Guid CartId { get; set; }
-        [ForeignKey("UserId")]
-        public int UserId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+        public Guid CartId { get; set; } = Guid.NewGuid();
+        [ForeignKey("Id")]
+        public string Id { get; set; }
+        [ForeignKey("LocationId")]
+        public int LocationId { get; set; }
     }
 }

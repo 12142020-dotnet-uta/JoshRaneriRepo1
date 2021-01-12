@@ -19,7 +19,7 @@ namespace ModelLayer
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LocationId { get; set; }
-        [Required]
+        //[Required]
         public string LocationName { get; set; }
     }
 }
