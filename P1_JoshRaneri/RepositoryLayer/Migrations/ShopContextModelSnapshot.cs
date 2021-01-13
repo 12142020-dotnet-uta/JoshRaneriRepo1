@@ -228,12 +228,16 @@ namespace RepositoryLayer.Migrations
             modelBuilder.Entity("ModelLayer.Cart", b =>
                 {
                     b.Property<Guid>("CartId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("LocationId")
                         .HasColumnType("int");
 
-                    b.HasKey("CartId", "UserId");
+                    b.HasKey("CartId", "Id", "LocationId");
 
                     b.ToTable("Carts");
                 });
@@ -262,7 +266,6 @@ namespace RepositoryLayer.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("LocationName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LocationId");
@@ -295,6 +298,9 @@ namespace RepositoryLayer.Migrations
                     b.Property<Guid>("CartId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
@@ -303,9 +309,6 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<decimal>("OrderTotal")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("OrderId");
 
@@ -364,9 +367,6 @@ namespace RepositoryLayer.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()

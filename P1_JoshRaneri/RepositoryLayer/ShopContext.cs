@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ModelLayer;
+using ModelLayer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,11 +38,12 @@ namespace RepositoryLayer
             modelBuilder.Entity<LocationInventory>()
                 .HasKey(c => new { c.LocationId, c.ProductId });
             modelBuilder.Entity<Cart>()
-                .HasKey(c => new { c.CartId, c.UserId });
+                .HasKey(c => new { c.CartId, c.Id, c.LocationId });
             modelBuilder.Entity<CartInventory>()
                 .HasKey(c => new { c.CartId, c.ProductId });
             modelBuilder.Entity<OrderInventory>()
                 .HasKey(c => new { c.OrderId, c.ProductId });
+
             base.OnModelCreating(modelBuilder);
         }
     }

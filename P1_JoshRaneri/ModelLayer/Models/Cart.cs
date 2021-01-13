@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -14,8 +15,14 @@ namespace ModelLayer
 
         }
         [Key]
-        public Guid CartId { get; set; }
-        [ForeignKey("UserId")]
-        public int UserId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DisplayName("Cart Id")]
+        public Guid CartId { get; set; } = Guid.NewGuid();
+        [ForeignKey("Id")]
+        [DisplayName("User Id")]
+        public string Id { get; set; }
+        [ForeignKey("LocationId")]
+        [DisplayName("Location Id")]
+        public int LocationId { get; set; }
     }
 }

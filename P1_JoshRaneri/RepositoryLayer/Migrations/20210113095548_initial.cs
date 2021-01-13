@@ -30,7 +30,6 @@ namespace RepositoryLayer.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsAdmin = table.Column<bool>(type: "bit", nullable: true),
                     DefaultStore = table.Column<int>(type: "int", nullable: true),
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -71,11 +70,12 @@ namespace RepositoryLayer.Migrations
                 columns: table => new
                 {
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Carts", x => new { x.CartId, x.UserId });
+                    table.PrimaryKey("PK_Carts", x => new { x.CartId, x.Id, x.LocationId });
                 });
 
             migrationBuilder.CreateTable(
@@ -97,7 +97,7 @@ namespace RepositoryLayer.Migrations
                 {
                     LocationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LocationName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LocationName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -123,7 +123,7 @@ namespace RepositoryLayer.Migrations
                 {
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LocationId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrderTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
