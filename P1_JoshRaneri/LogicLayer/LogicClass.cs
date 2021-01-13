@@ -32,7 +32,6 @@ namespace LogicLayer
             List<Location> locationList = _repo.locations.Where(t => t != null).ToList();
             return locationList;
         }
-        
         public UserViewModel DisplayUser(Claim claim)
         {
             CustomUser user = new CustomUser();
@@ -62,10 +61,23 @@ namespace LogicLayer
         {
             return _repo.locations.FirstOrDefault(location => location.LocationId == id);
         }
+        public Order GetOrderById(Guid id)
+        {
+            return _repo.orders.FirstOrDefault(x => x.OrderId == id);
+        }
         public void SetUserDefaultStore(CustomUser user, int id)
         {
             CustomUser tUser = _repo.customUsers.FirstOrDefault(t => t.Id == user.Id);
-            Cart tCart = _repo.carts.FirstOrDefault(s => s.Id == tUser.Id && s.LocationId == tUser.DefaultStore);
+            Cart tCart = _repo.carts.FirstOrDefault(s => s.Id == tUser.Id && s.LocationId == id);
+            if (tCart == null)
+            {
+                tCart = new Cart
+                {
+                    Id = user.Id,
+                    LocationId = id
+                };
+                InitializeCart(tCart);
+            }
             tUser.DefaultStore = id;
             tUser.CartId = tCart.CartId;
             _repo.CommitSave();
@@ -107,6 +119,31 @@ namespace LogicLayer
             l = livm;
             return livmList;
         }
+        public void EmptyCurrentCart(CustomUser user)
+        {
+            foreach (CartInventory c in _repo.cartInventories)
+            {
+                if (c.CartId == user.CartId)
+                {
+                    _repo.cartInventories.Remove(c);
+                }
+            }
+            foreach (Cart c in _repo.carts)
+            {
+                if (c.CartId == user.CartId)
+                {
+                    _repo.carts.Remove(c);
+                }
+            }
+            Cart cart = new Cart()
+            {
+                Id = user.Id,
+                LocationId = user.DefaultStore
+            };
+            _repo.carts.Add(cart);
+            user.CartId = cart.CartId;
+            _repo.CommitSave();
+        }
         public void InitializeCart(Cart cart)
         {
             _repo.carts.Add(cart);
@@ -130,6 +167,90 @@ namespace LogicLayer
             CustomUser tUser = _repo.customUsers.FirstOrDefault(t => t.Id == user.Id);
             tUser.Address = address;
             _repo.CommitSave();
+        }
+        public List<InvoiceViewModel> CreateInvoiceList(CustomUser user)
+        {
+            List<InvoiceViewModel> ivmList = new List<InvoiceViewModel>();
+            List<CartInventory> cList = new List<CartInventory>();
+            foreach (CartInventory c in _repo.cartInventories)
+            {
+                if (c.CartId == user.CartId)
+                {
+                    cList.Add(c);
+                }
+            }
+            foreach (CartInventory c in _repo.cartInventories)
+            { 
+                Product p = _repo.products.FirstOrDefault(x => x.ProductId == c.ProductId);
+                ivmList.Add(_mapper.CreateInvoiceViewModel(user, p, c.CartQuantity));
+            }
+            return ivmList;
+        }
+        public List<OrderInvoiceViewModel> CreateOrderInvoiceList(CustomUser user)
+        {
+            List<OrderInvoiceViewModel> oivmList = new List<OrderInvoiceViewModel>();
+
+            List<OrderInventory> oList = new List<OrderInventory>();
+            foreach (OrderInventory o in _repo.orderInventories)
+            {
+                foreach (Order order in _repo.orders)
+                {
+                    if (order.Id == user.Id && o.OrderId == order.OrderId)
+                    {
+                        oList.Add(o);
+                    }
+                }
+            }
+            foreach (OrderInventory o in _repo.orderInventories)
+            {
+                Product p = _repo.products.FirstOrDefault(x => x.ProductId == o.ProductId);
+                oivmList.Add(_mapper.CreateOrderInvoiceViewModel(user, p, o));
+            }
+            return oivmList;
+        }
+        public Order PlaceOrder(CustomUser user)
+        {
+            List<InvoiceViewModel> ivmList = CreateInvoiceList(user);
+            Order order = new Order()
+            {
+                CartId = user.CartId,
+                Id = user.Id,
+                LocationId = ivmList.FirstOrDefault(x => x.Id == user.Id).LocationId,
+                OrderTime = DateTime.Now,
+                OrderTotal = ivmList.Sum(x => x.LineTotal)
+            };
+            _repo.orders.Add(order);
+            foreach (InvoiceViewModel ivm in ivmList)
+            {
+                _repo.orderInventories.Add(new OrderInventory() { OrderId = order.OrderId, ProductId = ivm.Product.ProductId, OrderQuantity = ivm.Quantity });
+            }
+            EmptyCurrentCart(user);
+            _repo.CommitSave();
+            return order;
+        }
+        public List<Order> GetUserOrderHistory(CustomUser user)
+        {
+            List<Order> orders = new List<Order>();
+            foreach (Order order in _repo.orders)
+            {
+                if (order.Id == user.Id)
+                {
+                    orders.Add(order);
+                }
+            }
+            return orders;
+        }
+        public List<Order> GetLocationOrderHistory(CustomUser user)
+        {
+            List<Order> orders = new List<Order>();
+            foreach (Order order in _repo.orders)
+            {
+                if (order.LocationId == user.DefaultStore)
+                {
+                    orders.Add(order);
+                }
+            }
+            return orders;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace P1_Main.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             if (claimsIdentity == null)
             {
-                return View("~/Home/Index");
+                return RedirectToAction("Index", "Home");
             }
             List<LocationInventoryViewModel> livmList = _logicClass.DisplayLocationInventory(_logicClass.GetCurrentUser(claimsIdentity));
             return View("ShopView", livmList);
@@ -44,7 +44,7 @@ namespace P1_Main.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             if (claimsIdentity == null)
             {
-                return View("~/Home/Index");
+                return RedirectToAction("Index", "Home");
             }
             List<LocationInventoryViewModel> livmList = _logicClass.DisplayLocationInventory(_logicClass.GetCurrentUser(claimsIdentity));
             LocationInventoryViewModel livm = livmList.FirstOrDefault(x => x.ProductId == productId);
@@ -64,27 +64,28 @@ namespace P1_Main.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             if (claimsIdentity == null)
             {
-                return View("~/Home/Index");
+                return RedirectToAction("Index", "Home");
             }
             var user = _logicClass.GetCurrentUser(claimsIdentity);
             List<LocationInventoryViewModel> livmList = _logicClass.DisplayLocationInventory(user);
             livmList = _logicClass.AddToCart(livmList, livm, user);
-            return View("ShopView", livmList);
+            return RedirectToAction("Shop");
         }
 
         // POST: ShopInventoryController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        //[HttpGet]
+        //[ValidateAntiForgeryToken]
+        [ActionName("EmptyCart")]
+        public ActionResult EmptyCart()
         {
-            try
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity == null)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
-            catch
-            {
-                return View();
-            }
+            var user = _logicClass.GetCurrentUser(claimsIdentity);
+            _logicClass.EmptyCurrentCart(user);
+            return RedirectToAction("Shop");
         }
 
         // GET: ShopInventoryController/Edit/5
@@ -94,39 +95,91 @@ namespace P1_Main.Controllers
         }
 
         // POST: ShopInventoryController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [ActionName("CurrentCart")]
+        public ActionResult CurrentCart()
         {
-            try
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity == null)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
-            catch
-            {
-                return View();
-            }
+            var user = _logicClass.GetCurrentUser(claimsIdentity);
+            var ivmList = _logicClass.CreateInvoiceList(user);
+            decimal total = ivmList.Sum(x => x.LineTotal);
+            ViewBag.CartTotal = total;
+            return View("CurrentCartView", ivmList);
         }
 
         // GET: ShopInventoryController/Delete/5
-        public ActionResult Delete(int id)
+        [ActionName("CheckOut")]
+        public ActionResult CheckOut()
         {
-            return View();
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var user = _logicClass.GetCurrentUser(claimsIdentity);
+            var ivmList = _logicClass.CreateInvoiceList(user);
+            var order = _logicClass.PlaceOrder(user);
+            decimal total = ivmList.Sum(x => x.LineTotal);
+            ViewBag.OrderDate = order.OrderTime;
+            ViewBag.OrderTotal = total;
+            return View("OrderView", ivmList);
         }
-
-        // POST: ShopInventoryController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [ActionName("OrderDetails")]
+        public ActionResult OrderDetails(Guid id)
         {
-            try
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity == null)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
-            catch
+            var user = _logicClass.GetCurrentUser(claimsIdentity);
+            //var ivmList = _logicClass.CreateInvoiceList(user);
+            var oivmList = _logicClass.CreateOrderInvoiceList(user);
+            decimal total = oivmList.Sum(x => x.LineTotal);
+            var order = _logicClass.GetOrderById(id);
+            ViewBag.OrderDate = order.OrderTime;
+            ViewBag.OrderTotal = total;
+            return View("OrderView", oivmList);
+        }
+        // POST: ShopInventoryController/Delete/5
+        [ActionName("UserOrderHistory")]
+        public ActionResult UserOrderHistory()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity == null)
             {
-                return View();
+                return RedirectToAction("Index", "Home");
             }
+            var user = _logicClass.GetCurrentUser(claimsIdentity);
+            //var ivmList = _logicClass.CreateInvoiceList(user);
+            //var oivmList = _logicClass.CreateOrderInvoiceList(user);
+            //decimal total = oivmList.Sum(x => x.LineTotal);
+            //var order = _logicClass.GetOrderById(oivmList.FirstOrDefault(x => x.Id != null).OrderId);
+            var orders = _logicClass.GetUserOrderHistory(user);
+            //ViewBag.OrderDate = order.OrderTime;
+            //ViewBag.OrderTotal = total;
+            return View("UserOrderHistoryView", orders);
+        }
+        [ActionName("LocationOrderHistory")]
+        public ActionResult LocationOrderHistory()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var user = _logicClass.GetCurrentUser(claimsIdentity);
+            //var ivmList = _logicClass.CreateInvoiceList(user);
+            //var oivmList = _logicClass.CreateOrderInvoiceList(user);
+            //decimal total = oivmList.Sum(x => x.LineTotal);
+            //var order = _logicClass.GetOrderById(oivmList.FirstOrDefault(x => x.Id != null).OrderId);
+            var orders = _logicClass.GetLocationOrderHistory(user);
+            //ViewBag.OrderDate = order.OrderTime;
+            //ViewBag.OrderTotal = total;
+            return View("LocationOrderHistoryView", orders);
         }
     }
 }

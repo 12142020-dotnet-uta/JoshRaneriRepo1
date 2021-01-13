@@ -10,7 +10,7 @@ using RepositoryLayer;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20210111130554_initial")]
+    [Migration("20210113095548_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

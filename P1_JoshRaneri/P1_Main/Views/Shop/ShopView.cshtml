@@ -1,15 +1,12 @@
 ﻿@model IEnumerable<ModelLayer.ViewModels.LocationInventoryViewModel>
 
 @{
-    ViewData["Title"] = "ShopView";
+    ViewData["Title"] = "Shop View";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>   Shop   -   @Model.FirstOrDefault(x => x.Location != null).Location.LocationName</h1>
 
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -25,9 +22,6 @@
             <th class="text-center">
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.purchaseQuantity)
-            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -46,9 +40,6 @@
             <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            @*<td class="text-center">
-                @Html.DisplayFor(modelItem => item.purchaseQuantity)
-            </td>*@
             <td class="text-center">
                 <form asp-controller="Shop" asp-action="Details" asp-route-id="@item.ProductId">
                     <button type="submit" class="btn btn-primary">Select</button>
@@ -56,5 +47,24 @@
             </td>
         </tr>
         }
+    <tr>
+        <td>
+            <label></label>
+        </td>
+        <td>
+            <label></label>
+        </td>
+        <td>
+            <label></label>
+        </td>
+        <td>
+            <form asp-controller="Shop" asp-action="CurrentCart">
+                <button type="submit" class="btn btn-primary">View Cart</button>
+            </form>
+        </td>
+        <td>
+            <label></label>
+        </td>
+    </tr>
     </tbody>
 </table>
