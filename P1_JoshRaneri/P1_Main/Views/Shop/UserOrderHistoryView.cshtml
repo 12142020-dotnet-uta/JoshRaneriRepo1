@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ModelLayer.Order>
 
 @{
-    ViewData["Title"] = "UserOrderHistoryView";
+    ViewData["Title"] = "User History";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,19 +11,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderId)
+                <label> @Html.DisplayNameFor(model => model.OrderId)</label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LocationId)
+                <label>@Html.DisplayNameFor(model => model.LocationId)</label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                <label>@Html.DisplayNameFor(model => model.Id)</label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderTime)
+                <label>@Html.DisplayNameFor(model => model.OrderTime)</label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderTotal)
+                <label>@Html.DisplayNameFor(model => model.OrderTotal)</label>
             </th>
             <th></th>
         </tr>
@@ -32,19 +32,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.OrderId)
+                <label>@Html.DisplayFor(modelItem => item.OrderId)</label>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LocationId)
+                <label>@Html.DisplayFor(modelItem => item.LocationId)</label>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
+                <label>@Html.DisplayFor(modelItem => item.Id)</label>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OrderTime)
+                <label>@Html.DisplayFor(modelItem => item.OrderTime)</label>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OrderTotal)
+                <label>$@Html.DisplayFor(modelItem => item.OrderTotal)</label>
             </td>
             <td class="text-center">
                 <form asp-controller="Shop" asp-action="OrderDetails" asp-route-id="@item.OrderId">

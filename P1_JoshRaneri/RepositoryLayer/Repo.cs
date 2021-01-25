@@ -93,7 +93,6 @@ namespace RepositoryLayer
         public void CommitSave()
         {
             _shopContext.SaveChanges();
-        }
-        
+        }        
     }
 }

@@ -26,11 +26,12 @@ namespace P1_Main.Controllers
         public ActionResult Shop()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-            if (claimsIdentity == null)
+            if (claimsIdentity == null || claimsIdentity.IsAuthenticated == false)
             {
                 return RedirectToAction("Index", "Home");
             }
-            List<LocationInventoryViewModel> livmList = _logicClass.DisplayLocationInventory(_logicClass.GetCurrentUser(claimsIdentity));
+            var user = _logicClass.GetCurrentUser(claimsIdentity);
+            List<LocationInventoryViewModel> livmList = _logicClass.DisplayLocationInventory(user);
             return View("ShopView", livmList);
         }
 
@@ -88,12 +89,6 @@ namespace P1_Main.Controllers
             return RedirectToAction("Shop");
         }
 
-        // GET: ShopInventoryController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
         // POST: ShopInventoryController/Edit/5
         [ActionName("CurrentCart")]
         public ActionResult CurrentCart()
@@ -120,12 +115,13 @@ namespace P1_Main.Controllers
                 return RedirectToAction("Index", "Home");
             }
             var user = _logicClass.GetCurrentUser(claimsIdentity);
-            var ivmList = _logicClass.CreateInvoiceList(user);
+            //var ivmList = _logicClass.CreateInvoiceList(user);
             var order = _logicClass.PlaceOrder(user);
-            decimal total = ivmList.Sum(x => x.LineTotal);
+            var oivmList = _logicClass.CreateOrderInvoiceList(user, order);
+            decimal total = oivmList.Sum(x => x.LineTotal);
             ViewBag.OrderDate = order.OrderTime;
             ViewBag.OrderTotal = total;
-            return View("OrderView", ivmList);
+            return View("OrderView", oivmList);
         }
         [ActionName("OrderDetails")]
         public ActionResult OrderDetails(Guid id)
@@ -137,9 +133,10 @@ namespace P1_Main.Controllers
             }
             var user = _logicClass.GetCurrentUser(claimsIdentity);
             //var ivmList = _logicClass.CreateInvoiceList(user);
-            var oivmList = _logicClass.CreateOrderInvoiceList(user);
-            decimal total = oivmList.Sum(x => x.LineTotal);
             var order = _logicClass.GetOrderById(id);
+            var oivmList = _logicClass.CreateOrderInvoiceList(user, order);
+            decimal total = oivmList.Sum(x => x.LineTotal);
+
             ViewBag.OrderDate = order.OrderTime;
             ViewBag.OrderTotal = total;
             return View("OrderView", oivmList);

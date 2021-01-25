@@ -128,6 +128,10 @@ namespace LogicLayer
                     _repo.cartInventories.Remove(c);
                 }
             }
+            //foreach (LocationInventory inv in _repo.locationInventories)
+            //{
+            //    if(inv.Loca)
+            //}
             foreach (Cart c in _repo.carts)
             {
                 if (c.CartId == user.CartId)
@@ -186,25 +190,25 @@ namespace LogicLayer
             }
             return ivmList;
         }
-        public List<OrderInvoiceViewModel> CreateOrderInvoiceList(CustomUser user)
+        public List<OrderInvoiceViewModel> CreateOrderInvoiceList(CustomUser user, Order order1)
         {
             List<OrderInvoiceViewModel> oivmList = new List<OrderInvoiceViewModel>();
 
             List<OrderInventory> oList = new List<OrderInventory>();
             foreach (OrderInventory o in _repo.orderInventories)
             {
-                foreach (Order order in _repo.orders)
+                if (order1.Id == user.Id && o.OrderId == order1.OrderId)
                 {
-                    if (order.Id == user.Id && o.OrderId == order.OrderId)
-                    {
-                        oList.Add(o);
-                    }
+                    oList.Add(o);
                 }
             }
             foreach (OrderInventory o in _repo.orderInventories)
             {
-                Product p = _repo.products.FirstOrDefault(x => x.ProductId == o.ProductId);
-                oivmList.Add(_mapper.CreateOrderInvoiceViewModel(user, p, o));
+                if (o.OrderId == order1.OrderId)
+                {
+                    Product p = _repo.products.FirstOrDefault(x => x.ProductId == o.ProductId);
+                    oivmList.Add(_mapper.CreateOrderInvoiceViewModel(user, p, o));
+                }
             }
             return oivmList;
         }
@@ -213,7 +217,7 @@ namespace LogicLayer
             List<InvoiceViewModel> ivmList = CreateInvoiceList(user);
             Order order = new Order()
             {
-                CartId = user.CartId,
+                OrderId = user.CartId,
                 Id = user.Id,
                 LocationId = ivmList.FirstOrDefault(x => x.Id == user.Id).LocationId,
                 OrderTime = DateTime.Now,
